@@ -1,12 +1,30 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import basedatos from "../utils/basedatos.json";
+import Swal from "sweetalert2";
 
 export function Formulario() {
   const [Cedula, setCedula] = useState("");
   const [Contraseña, setContraseña] = useState("");
 
+  let router = useNavigate();
+
   function procesarFormulario(e) {
     e.preventDefault();
-    console.log("procesar formulario");
+
+    let search = basedatos.find(function (usuario) {
+      return usuario.documento === Cedula;
+    });
+
+    if (!search) {
+      Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: "Something went wrong!",
+      });
+    } else {
+      router("/home");
+    }
   }
 
   return (
